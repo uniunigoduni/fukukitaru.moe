@@ -1,1 +1,360 @@
-hello
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Fungyaro! - fukukitaru.moe</title>
+        <meta name="author" content="hamutyanzu">
+        <meta name="description" content="The website for Matikane Fukukitaru, the most energetic Uma Musume out there.">
+        <meta name="keywords" content="uma,musume,uma musume,matikane,Fukukitaru,matikane Fukukitaru,fukukitaru,matikane fukukitaru,uma musume pretty derby,pretty,derby,pretty derby,ウマ娘,ウマ娘プリティーダービー,プリティーダービー,マチカネ,フクキタル,マチカネフクキタル">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+        <meta property="og:title" content="Hungyaro! - fukukitaru.moe">
+        <meta property="og:description" content="The website for Matikane Fukukitaru, the most energetic Uma Musume out there.">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://www.fukukitaru.moe/">
+        <meta property="og:image" content="https://www.fukukitaru.moe/img/FukukitaruHappy.png">
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:title" content="Ei Ei Mun! - tannhauser.moe">
+        <meta name="twitter:description" content="The website for Matikane Tannhäuser, the cutest Uma Musume out there.">
+        <meta name="twitter:image" content="https://www.fukukitaru.moe/img/FukukitaruHappy.png">
+        <link rel="stylesheet" href="style.css" type="text/css">
+        <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+        <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+        <link rel="canonical" href="https://www.fukukitaru.moe/">
+        <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+        <script src="https://code.iconify.design/iconify-icon/1.0.2/iconify-icon.min.js"></script>
+    </head>
+    <body>
+        <img src="img/ChibiFukukitaru1.webp" class="preload">
+        <img src="img/ChibiFukukitaru2.webp" class="preload">
+        <div id="content">
+            <h1>Welcome to fukukitaru.moe</h1>
+            <hr id="subtitle-seperator">
+            <h2>The website for Matikane Fukukitaru, the most energetic Uma Musume out there.</h2>
+            <div id="counter-container">
+                <p>The fungyaro has been squished</p>
+                <p id="counter">0</p>
+                <p>times</p>
+                <button id="counter-button" onclick="counterClick()">Squish the fungyaro!</button>
+            </div>
+            <div id="video-container">
+                <h2 id="video-title">Fukuchan Concerts</h2>
+                <hr>
+                <div id="video-item-container"></div>
+            </div>
+            <h2 id="gallery-title">Fukuchan Photo Gallery</h2>
+            <hr>
+            <div id="grid">
+                <noscript>Your browser does not support JavaScript or JavaScript has been disabled.<br>This website relies on JavaScript, so please enable it or use another browser.</noscript>
+            </div>
+        </div>
+        <div id="footer">
+            <div id="footer-text">
+                <p id="footer-header-text">If you have any suggestions in terms of features/images <span class="no-break">(including source),</span> don't hesitate to contact me here:</p>
+                <p><iconify-icon icon="ic:baseline-discord" id="discord-footer-icon" class="footer-icon"></iconify-icon><span class="footer-icon-text">kawaii_shadowii</span></p>
+                <p><a href="https://twitter.com/ml8im" target="_blank"><iconify-icon icon="mdi:twitter" id="twitter-footer-icon" class="footer-icon"></iconify-icon><span class="footer-icon-text">@Kawaii_Shadowii</span></a></p>
+                <p>コード提供ありがとうございます！助かります。</p>
+                <p><a href="https://github.com/KawaiiShadowii" target="_blank"><iconify-icon icon="mdi:github" id="github-footer-icon" class="footer-icon"></iconify-icon><span class="footer-icon-text">KawaiiShadowii</span></a></p>
+                <p id="footer-repository-text">You can check out the GitHub repository here:</p>
+                <p><a href="https://github.com/KawaiiShadowii/tannhauser.moe" target="_blank"><iconify-icon icon="mdi:github" id="github-footer-icon" class="footer-icon"></iconify-icon><span class="footer-icon-text">tannhauser.moe Repository</span></a></p>
+            </div>
+        </div>
+        <script type="text/javascript">
+            //#region Global Variables
+            var audioList = [
+                new Audio("audio/daikiti.mp3"),
+                new Audio("audio/fufoo.mp3"),
+                new Audio("audio/fungyaro.mp3"),
+                new Audio("audio/fungyaroo.mp3"),
+                new Audio("audio/funnyaka.mp3"),
+                new Audio("audio/mun5.mp3"),
+                new Audio("audio/wasshoi.mp3"),
+                new Audio("audio/mumu.mp3"),
+                new Audio("audio/muhuhu.mp3"),
+                new Audio("audio/happycomecome.mp3"),
+                new Audio("audio/hannnyaka.mp3"),
+                new Audio("audio/oo.mp3"),
+                new Audio("audio/nyohoho.mp3"),
+                new Audio("audio/muhuhu.mp3"),
+                new Audio("audio/mou.mp3"),
+                new Audio("audio/huhhuhu.mp3"),
+                new Audio("audio/hourensou.mp3"),
+                new Audio("audio/hai.mp3"),
+                new Audio("audio/daikitidesu.mp3")
+            ];
+
+            for (const audio of audioList) {
+                audio.preload = "auto";
+            };
+
+            var counter = 0;
+            var lastThreeSecondsCounter = 0;
+            var temporaryCounter = 0;
+            var firstSquish = true;
+
+            var grid_element = document.querySelector("#grid");
+            var msnry;
+
+            var playerReady = false;
+            var firstVisibleVideo = true;
+
+            var videoIdMinViews = {
+                "bVzgjJaer3c": 250000,
+                "sGvUskSGjFo": 500000,
+                "eYdFB3sLo5w": 750000,
+                "iMzUHmmtQwE": 1000000,
+                "53ewYaWqGq8": 1250000,
+                "jCW3VvZTtNY": 1500000,
+                "ckgzzAenSlY": 2000000
+            }
+            //#endregion
+
+            //#region Autostart
+            function autorun() {                
+                loadVideos();
+                squishMuns();
+                loadImages();
+                removePreloads();
+            }
+
+            function squishMuns() {
+                setMunCounter();
+                setTimeout(squishMuns, 3000)
+            }
+
+            function setMunCounter() {
+                var counterElement = document.getElementById("counter");
+                
+                var req = new XMLHttpRequest();
+                req.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var data = JSON.parse(this.responseText);
+                        counter = data.muns;
+                        checkVideoVisibility();
+                        temporaryCounter = 0;
+                        counterElement.textContent = (counter + lastThreeSecondsCounter).toLocaleString();
+                    }
+                }
+
+                req.open("POST", "https://knctt.com/fungyaroapi");
+                var bodyString = JSON.stringify({"fungyaroData": lastThreeSecondsCounter})
+                temporaryCounter = lastThreeSecondsCounter;
+                lastThreeSecondsCounter = 0;
+                req.send(bodyString);
+            }
+
+            function checkVideoVisibility() {
+                var videoItems = document.querySelectorAll(".video-item");
+
+                for (const videoItem of videoItems) {
+                    var videoId = videoItem.getAttribute("data-videoId");
+
+                    if (counter >= videoIdMinViews[videoId]) {
+                        if (firstVisibleVideo) {
+                            var videoContainer = document.querySelector("#video-container")
+                            videoContainer.style.display = "initial";
+                            firstVisibleVideo = false;
+                        }
+                        videoItem.style.display = "initial";
+                    }
+                };
+            }
+
+            function loadVideos() {
+                var videoItemContainer = document.getElementById("video-item-container");
+                var counter = 0;
+
+                for (const videoId in videoIdMinViews) {
+                    counter++;
+                    let thumbnailId = `thumbnail${counter}`;
+                    let playerId = `player${counter}`;
+
+                    var videoItem = document.createElement("div");
+                    videoItem.classList.add("video-item");
+                    videoItem.setAttribute("data-videoId", videoId);
+
+                    var thumbnail = document.createElement("img");
+                    thumbnail.loading = "lazy";
+                    thumbnail.id = thumbnailId;
+                    thumbnail.src= `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+                    thumbnail.alt = "";
+                    thumbnail.onclick = function(){createPlayer(videoId, playerId, thumbnailId)};
+                    videoItem.appendChild(thumbnail);
+
+                    var player = document.createElement("div");
+                    player.id = playerId;
+                    videoItem.appendChild(player);
+
+                    videoItemContainer.appendChild(videoItem);
+                };
+            }
+            
+            function loadImages() {
+                var req = new XMLHttpRequest();
+                req.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var data = JSON.parse(this.responseText);
+                        data = data.sort(() => Math.random() - 0.5)
+
+                        var contentWidth = window.innerWidth * 0.8
+                        var placeholderWidth = 0
+
+                        if (window.innerWidth <= 500) {
+                            placeholderWidth = contentWidth - 10;
+                        } else if (window.innerWidth <= 854) {
+                            placeholderWidth = contentWidth * 0.5 - 10;
+                        } else if (window.innerWidth <= 1280) {
+                            placeholderWidth = contentWidth / 3 - 10;
+                        } else if (window.innerWidth <= 1920) {
+                            placeholderWidth = contentWidth * 0.25 - 10;
+                        } else if (window.innerWidth <= 2240) {
+                            placeholderWidth = contentWidth * 0.2 - 10;
+                        } else {
+                            placeholderWidth = contentWidth / 6 - 10;
+                        }
+
+                        for (const entry of data) {                            
+                            var twitter_link = document.createElement("a");
+                            twitter_link.href = entry.link;
+                            twitter_link.target = "_blank";
+                            twitter_link.classList.add("twitter-link");
+                            twitter_link.classList.add("grid-item");
+
+                            var twitter_img = document.createElement("img");
+                            twitter_img.loading = "lazy";
+                            twitter_img.src = entry.img;
+                            twitter_img.width = placeholderWidth;
+                            twitter_img.height = placeholderWidth;
+                            twitter_img.classList.add("twitter-img");
+                            twitter_img.alt = "";
+                            twitter_img.addEventListener("load", function() {
+                                msnry.layout();
+                            });
+
+                            twitter_link.appendChild(twitter_img);
+                            grid_element.appendChild(twitter_link);
+                        }
+
+                        msnry = new Masonry( grid_element, {
+                            itemSelector: '.grid-item',
+                            percentPosition: true
+                        });
+                    }                                
+                }
+
+                req.open("GET", "images.json");
+                req.send();  
+            }
+
+            function removePreloads() {
+                var preloads = [...document.getElementsByClassName("preload")]; // What the mun~ is this???
+
+                for (const preload of preloads) {
+                    document.body.removeChild(preload);
+                }
+            }
+            //#endregion
+
+            //#region Counter Button
+            function counterClick() {
+                var counterElement = document.getElementById("counter");                
+                lastThreeSecondsCounter += 1;
+                counterElement.textContent = (counter + lastThreeSecondsCounter + temporaryCounter).toLocaleString();             
+
+                playMun();
+                animateTannhauser();
+            }
+
+            function playMun() {
+                var audio;
+
+                if (firstSquish) {
+                    firstSquish = false;
+                    audio = audioList[0].cloneNode();
+                } else {
+                    var random = Math.floor(Math.random() * 10) + 1;
+                    audio = audioList[random].cloneNode();
+                }
+
+                audio.play();
+
+                audio.addEventListener("ended", function(){
+                   this.remove();
+                });
+            }
+
+            function animateTannhauser() {
+                var counter_button = document.getElementById("counter-button");
+                var id = null;
+
+                var random = Math.floor(Math.random() * 2) + 1;
+                var elem = document.createElement("img");
+                elem.src = `img/ChibiFukukitarus${random}.png`;
+                elem.style.position = "absolute";
+                elem.style.right = "-256px";
+                elem.style.top = counter_button.getClientRects()[0].bottom + scrollY - 256 + "px"
+                elem.style.zIndex = "-1";
+                document.body.appendChild(elem);
+
+                var pos = -256;
+                var limit = window.innerWidth + 256;
+                clearInterval(id);
+                id = setInterval(frame, 10);
+                function frame() {
+                    if (pos >= limit) {
+                    clearInterval(id);
+                    elem.remove()
+                    } else {
+                    pos += 20;
+                    elem.style.right = pos + 'px'; 
+                    }
+                }
+            }
+            //#endregion
+            
+            //#region YouTube player
+            var tag = document.createElement('script');
+
+            tag.src = "https://www.youtube.com/iframe_api";
+            var firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+            function onYouTubeIframeAPIReady() {
+                playerReady = true;
+            }
+
+            function createPlayer(videoId, playerId, thumbnailId) {
+                if (playerReady) {
+                    var thumbnail = document.getElementById(thumbnailId);
+                    thumbnail.style.display = "none";
+                    new YT.Player(playerId, {
+                        height: "100%",
+                        width: "100%",
+                        videoId: videoId,
+                        playerVars: {
+                            "playsinline": 1
+                        },
+                        events: {
+                            "onReady": onPlayerReady,
+                            "onStateChange": onPlayerStateChange
+                        }
+                    });
+                } else {
+                    setTimeout(createPlayer, 1000)
+                }
+            }
+
+            function onPlayerReady(event) {
+                event.target.playVideo();
+            }
+
+            function onPlayerStateChange(event) {
+                if (event.data == YT.PlayerState.ENDED) {
+                    event.target.stopVideo();
+                }
+            }
+            //#endregion
+
+            window.onload = autorun();
+        </script>
+    </body>
+</html>
