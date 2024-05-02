@@ -135,7 +135,7 @@
                 }
 
                 req.open("POST", "https://knctt.com/fungyaroapi");
-                var bodyString = JSON.stringify({"fungyaroData": lastThreeSecondsCounter})
+                var bodyString = JSON.stringify({"muns": lastThreeSecondsCounter})
                 temporaryCounter = lastThreeSecondsCounter;
                 lastThreeSecondsCounter = 0;
                 req.send(bodyString);
