@@ -123,23 +123,22 @@
             function setMunCounter() {
                 var counterElement = document.getElementById("counter");
                 
-                fetch('https://knctt.com:3000/fungyaroapi', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify({ muns: lastThreeSecondsCounter })
-                })
-                .then(response => response.json())
-                .then(data => {
-                  counter = data.muns;
-                  checkVideoVisibility();
-                  temporaryCounter = 0;
-                  counterElement.textContent = (counter + lastThreeSecondsCounter).toLocaleString();
-                })
-                .catch(error => {
-                  console.error('Error fetching mun counter:', error);
-                });
+                var req = new XMLHttpRequest();
+                req.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var data = JSON.parse(this.responseText);
+                        counter = data.muns;
+                        checkVideoVisibility();
+                        temporaryCounter = 0;
+                        counterElement.textContent = (counter + lastThreeSecondsCounter).toLocaleString();
+                    }
+                }
+
+                req.open("POST", "https://knctt.com/fungyaroapi");
+                var bodyString = JSON.stringify({"muns": lastThreeSecondsCounter})
+                temporaryCounter = lastThreeSecondsCounter;
+                lastThreeSecondsCounter = 0;
+                req.send(bodyString);
             }
 
 
