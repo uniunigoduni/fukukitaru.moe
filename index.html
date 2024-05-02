@@ -134,7 +134,7 @@
                     }
                 }
 
-                req.open("POST", "https://knctt.com/fungyaroapi");
+                req.open("POST", "https://knctt.com:3000/fungyaroapi");
                 var bodyString = JSON.stringify({"muns": lastThreeSecondsCounter})
                 temporaryCounter = lastThreeSecondsCounter;
                 lastThreeSecondsCounter = 0;
